@@ -11,22 +11,17 @@
  */
 class Solution {
 public:
-    void inorder(TreeNode* root, vector<int>&arr){
-        if(root==NULL)return;
-        inorder(root->left,arr);
-        arr.push_back(root->val);
-        inorder(root->right,arr);
+        bool findTarget(TreeNode* root, int k) {
+        unordered_set<int> seen;
+        return inorder(root, k, seen);
     }
-    bool findTarget(TreeNode* root, int k) {
-        vector<int>arr;
-        inorder(root,arr);
-        int i=0;
-        int j=arr.size()-1;
-        while(i<j){
-            if(arr[i]+arr[j]==k)return true;
-            else if(arr[i]+arr[j]>k)j--;
-            else if(arr[i]+arr[j]<k)i++;
-        }
-        return false;
+    
+private:
+    bool inorder(TreeNode* node, int k, unordered_set<int>& seen) {
+        if (!node) return false;
+        if (inorder(node->left, k, seen)) return true;
+        if (seen.count(k - node->val)) return true;
+        seen.insert(node->val);
+        return inorder(node->right, k, seen);
     }
 };
